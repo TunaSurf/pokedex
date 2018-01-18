@@ -13,7 +13,13 @@ class Searchbar extends Component {
           autoComplete="off"
           onChange={this.props.onChange}
         />
-        <button type="button">Filters</button>
+        <button 
+          type="button" 
+          id="showFilters"
+          onClick={this.props.onClick}
+        >
+          Show Filters
+        </button>
       </div>
     )
   };

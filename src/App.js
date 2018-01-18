@@ -3,6 +3,16 @@ import './App.css';
 import Navbar from './Navbar';
 import Searchbar from './Searchbar';
 import PokeList from './PokeList';
+import Filters from './Filters';
+
+var Pokedex = require('pokeapi-js-wrapper');
+
+var options = {
+  protocol: 'https',
+  versionPath: '/api/v2/',
+  cache: true,
+}
+var P = new Pokedex.Pokedex(options);
 
 class App extends Component {
   constructor(props) {
@@ -10,28 +20,36 @@ class App extends Component {
     this.state = {
       pokemon: [],
       pokemonAfterFilter: [],
-      pokeSearch: ""
+      pokeSearch: "",
+      listLoaded: false,
+      showFilters: false,
+      typeFilterValue: "bug"
     }
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleShowFilters = this.handleShowFilters.bind(this);
+    this.handleTypeFilterChange = this.handleTypeFilterChange.bind(this);
+    this.handleTypeFilterSubmit = this.handleTypeFilterSubmit.bind(this);
   }
 
-
-  // ********************
-  // How do I cache this?
-  // ********************
   componentDidMount() {
-    const pokemonAPI = 'https://pokeapi.co/api/v2/pokemon/?limit=807';
+    let interval = {
+      limit: 802,
+      offset: 0
+    }
 
-    fetch(pokemonAPI)
-    .then(data => data.json())
+    P.getPokemonsList(interval)
     .then(data => {
       const pokemon = data.results;
-      pokemon.forEach((poke, index) => {
-        poke.id = index + 1;
+      pokemon.forEach((poke) => {
+        poke.id = poke.url.replace(/https:\/\/pokeapi.co\/api\/v2\/pokemon\//,'').slice(0,-1);
       });
       const pokemonAfterFilter = pokemon;
-      this.setState({pokemon, pokemonAfterFilter});
+      this.setState({ 
+        pokemon, 
+        pokemonAfterFilter, 
+        listLoaded: true
+      });
     });
   }
 
@@ -48,18 +66,54 @@ class App extends Component {
     });
   }
 
+  handleShowFilters() {
+    this.setState((prevState) => {
+      return { showFilters: !prevState.showFilters };
+    });
+  }
+
+  handleTypeFilterChange(e) {
+    this.setState({ typeFilterValue: e.target.value })
+  }
+
+  handleTypeFilterSubmit() {
+    this.setState({ listLoaded: false })
+    P.getTypeByName(this.state.typeFilterValue)
+    .then(data => {
+      const pokemon = data.pokemon;
+      pokemon.forEach((poke) => {
+        poke.id = poke.pokemon.url.replace(/https:\/\/pokeapi.co\/api\/v2\/pokemon\//, '').slice(0, -1);
+        poke.name = poke.pokemon.name;
+        poke.url = poke.pokemon.url;
+      });
+      const pokemonAfterFilter = pokemon.filter(poke => poke.id < 10000);  //filter out alternate forms (mega, aloha, etc.)
+      this.setState({ pokemonAfterFilter, pokeSearch: "", listLoaded: true });
+    });
+  }
+
   render() {
+    let list = <div>Loading...</div>;
+    if(this.state.listLoaded) {
+      list =  <PokeList
+                value={this.state.pokeSearch}
+                pokemon={this.state.pokemonAfterFilter}
+              />
+    }
+
     return (
       <div className="App">
         <Navbar />
         <Searchbar 
           value={this.state.pokeSearch}
           onChange={this.handleChange}
+          onClick={this.handleShowFilters}
         />
-        <PokeList 
-          value={this.state.pokeSearch}
-          pokemon={this.state.pokemonAfterFilter}
+        <Filters 
+          showFilters={this.state.showFilters} 
+          onChange={this.handleTypeFilterChange}
+          onClick={this.handleTypeFilterSubmit}
         />
+        {list}
       </div>
     );
   }

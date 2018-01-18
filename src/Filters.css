@@ -1,0 +1,5 @@
+.filters {
+  height: 50px;
+  overflow: hidden;
+  transition: 300ms;
+}
