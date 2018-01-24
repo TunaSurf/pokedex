@@ -1,9 +1,14 @@
 import React from 'react';
 import './Navbar.css';
+import { Link } from 'react-router-dom';
 
 const Navbar = ({ onNewGame }) => (
   <header>
-    <h2>Pokedex</h2>
+    <h2>
+      <Link to={'/'}>
+        Pokedex
+      </Link>
+    </h2>
   </header>
 );
 

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import './PokeList.css';
 import PokeCard from './PokeCard';
+import { Link } from 'react-router-dom';
 
 class PokeList extends Component {
   render() {
     const pokemonCard = this.props.pokemon.map((poke, i) => (
-      <PokeCard key={poke.id} poke={poke.name} pokeID={poke.id} />
+      <Link to={`/${poke.name}`} key={poke.id}>
+        <PokeCard poke={poke.name} pokeID={poke.id} />
+      </Link>
     ));
 
     return (

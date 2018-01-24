@@ -1,0 +1,12 @@
+#search {
+  text-align: center;
+}
+
+#search p {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+#search button {
+  border: none;
+}

@@ -4,7 +4,7 @@ import './Searchbar.css';
 class Searchbar extends Component {
   render() {
     return(
-      <div>
+      <div id="search">
         <input
           type="text"
           name="pokeSearch"
@@ -13,6 +13,7 @@ class Searchbar extends Component {
           autoComplete="off"
           onChange={this.props.onChange}
         />
+        <p> or </p>
         <button 
           type="button" 
           id="showFilters"

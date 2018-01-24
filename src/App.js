@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
+import Loading from './Loading';
 import Navbar from './Navbar';
-import Searchbar from './Searchbar';
-import PokeList from './PokeList';
-import Filters from './Filters';
+import PokeHome from './PokeHome';
+import { Route } from 'react-router-dom';
+import PokeDetails from './PokeDetails';
 
 var Pokedex = require('pokeapi-js-wrapper');
 
@@ -19,17 +20,8 @@ class App extends Component {
     super(props);
     this.state = {
       pokemon: [],
-      pokemonAfterFilter: [],
-      pokeSearch: "",
-      listLoaded: false,
-      showFilters: false,
-      typeFilterValue: "bug"
+      listLoaded: false
     }
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleShowFilters = this.handleShowFilters.bind(this);
-    this.handleTypeFilterChange = this.handleTypeFilterChange.bind(this);
-    this.handleTypeFilterSubmit = this.handleTypeFilterSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -39,81 +31,33 @@ class App extends Component {
     }
 
     P.getPokemonsList(interval)
-    .then(data => {
-      const pokemon = data.results;
-      pokemon.forEach((poke) => {
-        poke.id = poke.url.replace(/https:\/\/pokeapi.co\/api\/v2\/pokemon\//,'').slice(0,-1);
+      .then(data => {
+        const pokemon = data.results;
+        pokemon.forEach((poke) => {
+          poke.id = poke.url.replace(/https:\/\/pokeapi.co\/api\/v2\/pokemon\//, '').slice(0, -1);
+        });
+        this.setState({
+          pokemon,
+          listLoaded: true
+        });
       });
-      const pokemonAfterFilter = pokemon;
-      this.setState({ 
-        pokemon, 
-        pokemonAfterFilter, 
-        listLoaded: true
-      });
-    });
-  }
-
-  handleChange(e) {
-    const pokemon = this.state.pokemon;
-    const pokemonAfterFilter = pokemon.filter(poke => {
-      const name = poke.name;
-      const input = e.target.value.toLowerCase();
-      return name.includes(input);
-    });
-    this.setState({
-      [e.target.name]: e.target.value,
-      pokemonAfterFilter
-    });
-  }
-
-  handleShowFilters() {
-    this.setState((prevState) => {
-      return { showFilters: !prevState.showFilters };
-    });
-  }
-
-  handleTypeFilterChange(e) {
-    this.setState({ typeFilterValue: e.target.value })
-  }
-
-  handleTypeFilterSubmit() {
-    this.setState({ listLoaded: false })
-    P.getTypeByName(this.state.typeFilterValue)
-    .then(data => {
-      const pokemon = data.pokemon;
-      pokemon.forEach((poke) => {
-        poke.id = poke.pokemon.url.replace(/https:\/\/pokeapi.co\/api\/v2\/pokemon\//, '').slice(0, -1);
-        poke.name = poke.pokemon.name;
-        poke.url = poke.pokemon.url;
-      });
-      const pokemonAfterFilter = pokemon.filter(poke => poke.id < 10000);  //filter out alternate forms (mega, aloha, etc.)
-      this.setState({ pokemonAfterFilter, pokeSearch: "", listLoaded: true });
-    });
   }
 
   render() {
-    let list = <div>Loading...</div>;
-    if(this.state.listLoaded) {
-      list =  <PokeList
-                value={this.state.pokeSearch}
-                pokemon={this.state.pokemonAfterFilter}
-              />
+    let loading = null;
+    if(!this.state.listLoaded) {
+      loading = <Loading />
     }
 
     return (
       <div className="App">
+        {loading}
         <Navbar />
-        <Searchbar 
-          value={this.state.pokeSearch}
-          onChange={this.handleChange}
-          onClick={this.handleShowFilters}
-        />
-        <Filters 
-          showFilters={this.state.showFilters} 
-          onChange={this.handleTypeFilterChange}
-          onClick={this.handleTypeFilterSubmit}
-        />
-        {list}
+        <Route exact={true} path="/" render={props => (
+          <PokeHome {...props} pokemon={this.state.pokemon} />
+        )}/>
+        <Route path="/:name" component={PokeDetails}/>
+        
       </div>
     );
   }
