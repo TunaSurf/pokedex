@@ -6,9 +6,9 @@ class PokeCard extends Component {
     const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.props.pokeID}.png`
 
     return (
-      <div className="card">
-        <h5>{this.props.pokeID}</h5>
-        <h3>{this.props.poke}</h3>
+      <div className="card waves-effect">
+        <h6>{this.props.pokeID}</h6>
+        <h5>{this.props.poke}</h5>
         <img src={image} alt={this.props.poke.name}/>
       </div>
     )

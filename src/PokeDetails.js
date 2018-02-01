@@ -25,7 +25,8 @@ class PokeDetails extends Component {
       flavorText: "",
       genus: "",
       evolutionId: 0,
-      evolutionChain: {}
+      evolutionChain: {},
+      detailsLoaded: false
     }
   }
 
@@ -72,30 +73,34 @@ class PokeDetails extends Component {
       .then(data => {
         const evolutionChain = data.chain;
         console.log(evolutionChain);
-        this.setState({ evolutionChain });
+        this.setState({ evolutionChain, detailsLoaded: true });
       });
   }
 
   render() {
+    let details = <div className="loading">Loading...</div>
+    if (this.state.detailsLoaded) {
+      details = <DetailsHead
+        name={this.state.name}
+        id={this.state.id}
+        image={this.state.image}
+        types={this.state.types}
+        flavorText={this.state.flavorText}
+        genus={this.state.genus}
+      />
+    }
     let stats = null;
-    if(this.state.stats.length > 0) {
+    if (this.state.stats.length > 0 && this.state.detailsLoaded) {
       stats = <Stats stats={this.state.stats} />
     }
     let evolution = null;
-    if ("evolves_to" in this.state.evolutionChain) {
+    if ("evolves_to" in this.state.evolutionChain && this.state.detailsLoaded) {
       evolution = <Evolution evolution={this.state.evolutionChain} />
     }
 
     return (
       <div>
-        <DetailsHead 
-          name={this.state.name}
-          id={this.state.id}
-          image={this.state.image}
-          types={this.state.types}
-          flavorText={this.state.flavorText}
-          genus={this.state.genus}
-        />
+        {details}
         {stats}
         {evolution}
       </div>

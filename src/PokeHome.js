@@ -16,10 +16,12 @@ class PokeHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      pokemon: [],
       pokemonAfterFilter: [],
       pokeSearch: "",
       showFilters: false,
-      typeFilterValue: "bug"
+      typeFilterValue: "bug",
+      listLoaded: false
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -28,12 +30,28 @@ class PokeHome extends Component {
     this.handleTypeFilterSubmit = this.handleTypeFilterSubmit.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ pokemonAfterFilter: nextProps.pokemon })
+  componentDidMount() {
+    let interval = {
+      limit: 802,
+      offset: 0
+    }
+
+    P.getPokemonsList(interval)
+      .then(data => {
+        const pokemon = data.results;
+        pokemon.forEach((poke) => {
+          poke.id = poke.url.replace(/https:\/\/pokeapi.co\/api\/v2\/pokemon\//, '').slice(0, -1);
+        });
+        this.setState({
+          pokemon,
+          pokemonAfterFilter: pokemon,
+          listLoaded: true
+        });
+      });
   }
 
   handleChange(e) {
-    const pokemon = this.props.pokemon;
+    const pokemon = this.state.pokemon;
     const pokemonAfterFilter = pokemon.filter(poke => {
       const name = poke.name;
       const input = e.target.value.toLowerCase();
@@ -71,8 +89,16 @@ class PokeHome extends Component {
   }
 
   render() {
+    let pokeList = <div className="loading">Loading...</div>
+    if (this.state.listLoaded) {
+      pokeList = <PokeList
+        value={this.state.pokeSearch}
+        pokemon={this.state.pokemonAfterFilter}
+      />
+    }
+
     return (
-      <div className="pokeHome">
+      < div className = "pokeHome" >
         <Searchbar
           value={this.state.pokeSearch}
           onChange={this.handleChange}
@@ -83,11 +109,13 @@ class PokeHome extends Component {
           onChange={this.handleTypeFilterChange}
           onClick={this.handleTypeFilterSubmit}
         />
-        <PokeList
-          value={this.state.pokeSearch}
-          pokemon={this.state.pokemonAfterFilter}
-        />
-      </div>
+        {pokeList}
+        <div className="fixed-action-btn">
+          <a className="btn-floating btn-large waves-effect deep-purple accent-1">
+            <i className="material-icons">keyboard_arrow_up</i>
+          </a>
+        </div>
+      </div >
     )
   }
 }

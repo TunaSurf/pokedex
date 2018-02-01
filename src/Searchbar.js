@@ -4,7 +4,7 @@ import './Searchbar.css';
 class Searchbar extends Component {
   render() {
     return(
-      <div id="search">
+      <div id="search" className="input-field">
         <input
           type="text"
           name="pokeSearch"

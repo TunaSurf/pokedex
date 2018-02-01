@@ -11,7 +11,7 @@ const Filters = (props) => {
 
   return (
     <div 
-      className="filters" 
+      className="filters input-field" 
       style={style}
     >
       <select 
