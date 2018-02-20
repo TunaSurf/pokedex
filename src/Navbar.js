@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 
 const Navbar = ({ onNewGame }) => (
   <header>
-    <h2>
+    <h4>
       <Link to={'/'}>
-        Pokedex
+        Pokédex
       </Link>
-    </h2>
+    </h4>
   </header>
 );
 

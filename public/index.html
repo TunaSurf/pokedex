@@ -20,6 +20,25 @@
     <script>
       $(document).ready(function () {
         $('select').material_select();
+        $('.button-collapse').sideNav({
+          menuWidth: 300,
+          draggable: true
+        });
+        $(document).scroll(function() {
+          var y = $(this).scrollTop();
+          if(y > $(window).height()) {
+            $('.fixed-action-btn').fadeIn();
+          } else {
+            $('.fixed-action-btn').fadeOut();
+          }
+        });
+        $('.fixed-action-btn').click(function () {
+          window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+          });
+        });
       });
     </script>
   </body>

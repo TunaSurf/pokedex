@@ -7,7 +7,7 @@ class PokeCard extends Component {
 
     return (
       <div className="card waves-effect">
-        <h6>{this.props.pokeID}</h6>
+        <h6>#{this.props.pokeID}</h6>
         <h5>{this.props.poke}</h5>
         <img src={image} alt={this.props.poke.name}/>
       </div>

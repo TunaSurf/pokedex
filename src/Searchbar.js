@@ -5,22 +5,15 @@ class Searchbar extends Component {
   render() {
     return(
       <div id="search" className="input-field">
+        <i className="material-icons prefix button-collapse" title="Filter" data-activates="slide-out">sort</i>
         <input
           type="text"
           name="pokeSearch"
-          placeholder="Search Pokemon"
+          placeholder="Search Pokémon"
           value={this.props.value}
           autoComplete="off"
           onChange={this.props.onChange}
         />
-        <p> or </p>
-        <button 
-          type="button" 
-          id="showFilters"
-          onClick={this.props.onClick}
-        >
-          Show Filters
-        </button>
       </div>
     )
   };

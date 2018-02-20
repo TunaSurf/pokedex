@@ -7,7 +7,7 @@ class PokeList extends Component {
   render() {
     const pokemonCard = this.props.pokemon.map((poke, i) => (
       <Link to={`/${poke.name}`} key={poke.id}>
-        <PokeCard poke={poke.name} pokeID={poke.id} />
+        <PokeCard poke={poke.name.replace(/-/, ' ')} pokeID={poke.id} />
       </Link>
     ));
 

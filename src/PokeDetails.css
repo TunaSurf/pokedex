@@ -1,0 +1,11 @@
+.details {
+  max-width: 1200px;
+  margin: 15px auto 0 auto;
+  color: #263238;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid #b388ff;
+  box-shadow: inset 0 2px 2px -2px #b388ff;
+}

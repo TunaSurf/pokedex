@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import SideNav from './SideNav';
 import Searchbar from './Searchbar';
 import PokeList from './PokeList';
-import Filters from './Filters';
+import loader from './pokeball_loader.svg'
 
 var Pokedex = require('pokeapi-js-wrapper');
 
@@ -25,7 +26,6 @@ class PokeHome extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleShowFilters = this.handleShowFilters.bind(this);
     this.handleTypeFilterChange = this.handleTypeFilterChange.bind(this);
     this.handleTypeFilterSubmit = this.handleTypeFilterSubmit.bind(this);
   }
@@ -63,12 +63,6 @@ class PokeHome extends Component {
     });
   }
 
-  handleShowFilters() {
-    this.setState((prevState) => {
-      return { showFilters: !prevState.showFilters };
-    });
-  }
-
   handleTypeFilterChange(e) {
     this.setState({ typeFilterValue: e.target.value })
   }
@@ -89,7 +83,7 @@ class PokeHome extends Component {
   }
 
   render() {
-    let pokeList = <div className="loading">Loading...</div>
+    let pokeList = <img src={loader} className="loader" alt="Loading"></img>
     if (this.state.listLoaded) {
       pokeList = <PokeList
         value={this.state.pokeSearch}
@@ -99,15 +93,13 @@ class PokeHome extends Component {
 
     return (
       < div className = "pokeHome" >
+        <SideNav 
+          onChange={this.handleTypeFilterChange}
+        />
         <Searchbar
           value={this.state.pokeSearch}
           onChange={this.handleChange}
           onClick={this.handleShowFilters}
-        />
-        <Filters
-          showFilters={this.state.showFilters}
-          onChange={this.handleTypeFilterChange}
-          onClick={this.handleTypeFilterSubmit}
         />
         {pokeList}
         <div className="fixed-action-btn">

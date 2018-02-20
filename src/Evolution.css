@@ -1,0 +1,34 @@
+.evolution {
+  width: 50%;
+  padding: 15px;
+}
+
+@media screen and (max-width: 800px) {
+  .evolution {
+    width: 100%;
+  }
+}
+
+.evolution h4 {
+  text-align: center;
+}
+
+.evolution-display {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  min-width: 120px;
+}
+
+.evolution-each {
+  text-align: center;
+}
+
+.evolution-each h6 {
+  text-transform: capitalize;
+  margin: 5px 0;
+}
+
+.evolution-each p {
+  margin: 0;
+}

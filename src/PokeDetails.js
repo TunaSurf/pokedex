@@ -3,6 +3,7 @@ import './PokeDetails.css';
 import DetailsHead from './DetailsHead';
 import Stats from './Stats';
 import Evolution from './Evolution';
+import loader from './pokeball_loader.svg'
 
 var Pokedex = require('pokeapi-js-wrapper');
 
@@ -78,10 +79,10 @@ class PokeDetails extends Component {
   }
 
   render() {
-    let details = <div className="loading">Loading...</div>
+    let details = <img src={loader} className="loader" alt="Loading"></img>
     if (this.state.detailsLoaded) {
       details = <DetailsHead
-        name={this.state.name}
+        name={this.state.name.replace(/-/, ' ')}
         id={this.state.id}
         image={this.state.image}
         types={this.state.types}
@@ -99,7 +100,7 @@ class PokeDetails extends Component {
     }
 
     return (
-      <div>
+      <div className="details">
         {details}
         {stats}
         {evolution}
