@@ -31,4 +31,6 @@
 
 .evolution-each p {
   margin: 0;
+  text-transform: capitalize;
+  max-width: 130px;
 }

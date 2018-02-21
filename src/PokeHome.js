@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './PokeHome.css';
 import Searchbar from './Searchbar';
 import PokeList from './PokeList';
 import loader from './pokeball_loader.svg'
@@ -57,6 +58,14 @@ class PokeHome extends Component {
     });
   }
 
+  handleToTop() {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
   render() {
     let pokeList = <img src={loader} className="loader" alt="Loading"></img>
     if (this.state.listLoaded) {
@@ -73,7 +82,7 @@ class PokeHome extends Component {
           onChange={this.handleChange}
         />
         {pokeList}
-        <div className="fixed-action-btn">
+        <div className="fixed-action-btn" onClick={this.handleToTop}>
           <a className="btn-floating btn-large waves-effect deep-purple accent-1">
             <i className="material-icons">keyboard_arrow_up</i>
           </a>
