@@ -5,7 +5,6 @@ class Searchbar extends Component {
   render() {
     return(
       <div id="search" className="input-field">
-        <i className="material-icons prefix button-collapse" title="Filter" data-activates="slide-out">sort</i>
         <input
           type="text"
           name="pokeSearch"

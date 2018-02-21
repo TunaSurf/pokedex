@@ -1,17 +1,3 @@
-i.prefix {
-  padding: 7px 0;
-  color: #adb3b6;
-  cursor: pointer;
-}
-
-i.prefix:hover {
-  color: #b388ff;
-}
-
-.input-field .prefix.active {
-  color: #adb3b6;
-}
-
 #search {
   text-align: center;
   padding: 0 30px;

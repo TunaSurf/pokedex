@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import SideNav from './SideNav';
 import Searchbar from './Searchbar';
 import PokeList from './PokeList';
 import loader from './pokeball_loader.svg'
@@ -20,14 +19,9 @@ class PokeHome extends Component {
       pokemon: [],
       pokemonAfterFilter: [],
       pokeSearch: "",
-      showFilters: false,
-      typeFilterValue: "bug",
       listLoaded: false
     }
-
     this.handleChange = this.handleChange.bind(this);
-    this.handleTypeFilterChange = this.handleTypeFilterChange.bind(this);
-    this.handleTypeFilterSubmit = this.handleTypeFilterSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -63,25 +57,6 @@ class PokeHome extends Component {
     });
   }
 
-  handleTypeFilterChange(e) {
-    this.setState({ typeFilterValue: e.target.value })
-  }
-
-  handleTypeFilterSubmit() {
-    this.setState({ listLoaded: false })
-    P.getTypeByName(this.state.typeFilterValue)
-      .then(data => {
-        const pokemon = data.pokemon;
-        pokemon.forEach((poke) => {
-          poke.id = poke.pokemon.url.replace(/https:\/\/pokeapi.co\/api\/v2\/pokemon\//, '').slice(0, -1);
-          poke.name = poke.pokemon.name;
-          poke.url = poke.pokemon.url;
-        });
-        const pokemonAfterFilter = pokemon.filter(poke => poke.id < 10000);  //filter out alternate forms (mega, aloha, etc.)
-        this.setState({ pokemonAfterFilter, pokeSearch: "", listLoaded: true });
-      });
-  }
-
   render() {
     let pokeList = <img src={loader} className="loader" alt="Loading"></img>
     if (this.state.listLoaded) {
@@ -93,13 +68,9 @@ class PokeHome extends Component {
 
     return (
       < div className = "pokeHome" >
-        <SideNav 
-          onChange={this.handleTypeFilterChange}
-        />
         <Searchbar
           value={this.state.pokeSearch}
           onChange={this.handleChange}
-          onClick={this.handleShowFilters}
         />
         {pokeList}
         <div className="fixed-action-btn">
